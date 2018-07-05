@@ -1,0 +1,25 @@
+{
+  "name": "canvas-spline",
+  "version": "0.0.1",
+  "description": "canvas绘制贝塞尔曲线，实现钢笔工具",
+  "main": "src/index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ouyangshikang/canvas-spline.git"
+  },
+  "keywords": [
+    "canvas"
+  ],
+  "author": "baituo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ouyangshikang/canvas-spline/issues"
+  },
+  "homepage": "https://github.com/ouyangshikang/canvas-spline#readme"
+}
