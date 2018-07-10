@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>crop-image</title>
+  <style>
+    .canvasDiv {
+        position: relative;
+        border: 1px solid red;
+        height: 400px;
+        width: 400px;
+        top: 50px;
+        left: 100px;
+        z-index: 0;
+    }
+
+    img {
+        width: 400px;
+        height: 400px;
+        z-index: 1;
+        position: absolute;
+    }
+
+    #canvas {
+        position: absolute;
+        z-index: 2;
+    }
+  </style>
+</head>
+<body>
+    <div class="canvasDiv">
+      <img src="./img/avatar.png"/>
+      <canvas id="canvas" width="400" height="400"></canvas>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/2.2.3/jquery.js"></script>
+    <script src="./crop-image.js"></script>
+</body>
+</html>
