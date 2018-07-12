@@ -4,7 +4,7 @@ const pointStyle = {
   mouse_end_point_length: 10,
   end_point_color: '00ffff'
 }
-class EndPoint {
+export class EndPoint {
   constructor(x, y, cp1, cp2) {
     this.x = x || 0
     this.y = y || 0
