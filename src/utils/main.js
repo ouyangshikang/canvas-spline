@@ -13,9 +13,9 @@ function loadImg() {
     imgCanvas.width = w
     imgCanvas.height = h
     imgCtx.drawImage(img, 0, 0)
+
+    let pen = new Pen()
+    pen.reset()
   }
   img.src = require('../img/logo.png')
-
-  let pen = new Pen()
-  pen.reset()
 }
