@@ -1,11 +1,14 @@
-import ControlPoint from './control-point'
+import { ControlPoint } from './control-point'
 const pointStyle = {
   end_point_length: 5,
   mouse_end_point_length: 10,
-  end_point_color: '00ffff'
+  end_point_color: '#5d5d5d', // 轮廓颜色
+  stroke_width: 2, // 轮廓宽度
+  fill_color: '#ffffff', // 填充颜色
+  hover_fill_color: '#ffc107' // 选中时的填充颜色
 }
 export class EndPoint {
-  constructor(x, y, cp1, cp2) {
+  constructor(x, y, cp0, cp1) {
     this.x = x || 0
     this.y = y || 0
     this.selected = false // point选中
@@ -20,22 +23,24 @@ export class EndPoint {
     return ctx
   }
   draw(ratio) {
-    // let height = pointStyle.end_point_length
     ratio = ratio || 1
     this.ctx.beginPath()
     this.ctx.arc(this.x * ratio, this.y * ratio, pointStyle.end_point_length, 0, Math.PI * 2, false)
   }
 
-  print() {
+  print(ratio) {
     ratio = ratio || 1
     this.draw(ratio)
     this.ctx.save()
     this.ctx.strokeStyle = pointStyle.end_point_color
-    this.ctx.stroke()
+    this.ctx.fillStyle = pointStyle.fill_color
+    this.ctx.lineWidth = pointStyle.stroke_width
     if(this.selected){
-      this.ctx.fillStyle = pointStyle.end_point_color
-      this.ctx.fill()
+      this.ctx.fillStyle = pointStyle.hover_fill_color
+      // this.ctx.fill()
     }
+    this.ctx.fill()
+    this.ctx.stroke()
     this.ctx.restore()
   }
   
