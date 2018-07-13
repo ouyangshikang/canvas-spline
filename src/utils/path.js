@@ -1,8 +1,8 @@
-import ControlPoint from './control-point'
+import { ControlPoint } from './control-point'
 // path 类
-export class Path extends Array{
+export class Path{
   constructor (isClose = false) {
-    super()
+    // super()
     this.isClose = isClose
 
   }
@@ -45,3 +45,4 @@ export class Path extends Array{
     }
   }
 }
+Object.setPrototypeOf(Path.prototype, Array.prototype);
