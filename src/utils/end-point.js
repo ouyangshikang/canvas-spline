@@ -11,17 +11,17 @@ export class EndPoint {
   constructor(x, y, cp0, cp1) {
     this.x = x || 0
     this.y = y || 0
-    this.selected = false // point选中
+    this.selected = false // endpoint被选中
     this.cp0 = cp0 || new ControlPoint(x, y)
     this.cp1 = cp1 || new ControlPoint(x, y)
     this.cpBalance = true  // 控制平衡点
   }
-  canvas() {
-    return canvas
-  }
-  ctx() {
-    return ctx
-  }
+  // canvas() {
+  //   return canvas
+  // }
+  // ctx() {
+  //   return ctx
+  // }
   draw(ratio) {
     ratio = ratio || 1
     this.ctx.beginPath()
@@ -37,7 +37,6 @@ export class EndPoint {
     this.ctx.lineWidth = pointStyle.stroke_width
     if(this.selected){
       this.ctx.fillStyle = pointStyle.hover_fill_color
-      // this.ctx.fill()
     }
     this.ctx.fill()
     this.ctx.stroke()
@@ -48,7 +47,9 @@ export class EndPoint {
   printControlPoints(ratio) {
     ratio = ratio || 1
     this.print(ratio)
-    if(!this.selected) return
+    if(!this.selected) {
+      return
+    }
     if(this.cp0.x !== this.x || this.cp0.y !== this.y){
       this.cp0.print(ratio)
       this.line(this.cp0.x, this.cp0.y, this.x,this.y, this.ctx, pointStyle.end_point_color)
@@ -62,9 +63,9 @@ export class EndPoint {
   line(x1, y1, x2, y2, ctx, color){
     ctx.save()
     ctx.beginPath()
-    ctx.moveTo(x1 * ratio, y1 * ratio)
+    ctx.moveTo(x1, y1)
     ctx.strokeStyle = color
-    ctx.lineTo(x2 * ratio, y2 * ratio)
+    ctx.lineTo(x2, y2)
     ctx.stroke()
     ctx.restore()
   }

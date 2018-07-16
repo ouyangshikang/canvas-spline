@@ -6,12 +6,12 @@ let imgCtx = imgCanvas.getContext('2d');
 function loadImg() {
   let img = new Image()
   img.onload = () => {
-    let w = img.width * 2
-    let h = img.height * 2
+    let w = img.width
+    let h = img.height
 
     imgCtx.clearRect(0, 0, imgCanvas.width, imgCanvas.height)
-    imgCanvas.width = w
-    imgCanvas.height = h
+    imgCanvas.width = w * 2
+    imgCanvas.height = h * 2
     imgCtx.drawImage(img, 0, 0, w, h)
 
     let pen = new Pen()

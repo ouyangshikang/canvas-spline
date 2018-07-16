@@ -1,6 +1,6 @@
 const pointStyle = {
-  control_point_radius: 5,
-  control_point_color: '#00ffff'
+  control_point_radius: 4,
+  control_point_color: '#005cf9'
 }
 export class ControlPoint {
   constructor(x, y) {
@@ -8,9 +8,9 @@ export class ControlPoint {
     this.y = y || 0
   }
   
-  ctx() {
-    return ctx
-  }
+  // ctx() {
+  //   return ctx
+  // }
 
   /* 画控制点 */
   draw(ratio) {
