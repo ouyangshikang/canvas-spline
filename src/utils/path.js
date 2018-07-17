@@ -3,7 +3,7 @@ import { ControlPoint } from './control-point'
 export class Path{
   constructor (isClose = false) {
     // super()
-    this.isClose = isClose
+    this.isClose = isClose  // 路径是否关闭
 
   }
 
@@ -22,7 +22,7 @@ export class Path{
   }
 
   removeSelected() {
-    this.forEach(function(ep){
+    this.forEach((ep) => {
       ep.selected = false
     })
   }

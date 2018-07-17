@@ -71,7 +71,7 @@ export class EndPoint {
   }
 
   isInPoint(x, y) {
-    this.draw(pointStyle.mouse_end_point_length)
+    this.draw()
     if(this.ctx.isPointInPath(x, y)) {
         return this
     }

@@ -3,9 +3,9 @@ import { Path } from './path'
 import { EndPoint } from './end-point'
 
 export class Pen {
-  constructor (name = 'pen', id = 'matting-pen') {
-    this.name = name
-    this.canvas = document.querySelector('#'+ id)
+  constructor (targetCvs = '#matting-pen', sourceCvs = '#matting-img') {
+    this.canvas = document.querySelector(targetCvs)
+    this.sourceCvs = document.querySelector(sourceCvs)
     this.ctx = this.canvas.getContext('2d')
     this.stroke_color = '#ffc107' // 线条颜色
   }
@@ -14,7 +14,7 @@ export class Pen {
     this.paths.push(new Path())
 
     this.dragging = false  // 是否正在拖动
-    this.editCpBalance = false // 
+    this.editCpBalance = false // 控制点平衡
     this.isNewEndPoint = false  // 是否新点
     this.currentEndPoint = null  // 当前点
     this.draggingControlPoint = null  // 当前控制点
@@ -23,14 +23,13 @@ export class Pen {
     ControlPoint.prototype.ctx = this.ctx
     EndPoint.prototype.ctx = this.ctx
     EndPoint.prototype.canvas = this
-    
-    let imgCvs = document.querySelector('#matting-img')
-    console.log(imgCvs.width)
-    this.canvas.width = imgCvs.width
-    this.canvas.height = imgCvs.height
+ 
+    this.canvas.width = this.sourceCvs.width
+    this.canvas.height = this.sourceCvs.height
     this.active()
   }
 
+  // the positoin on canvas
   positionToCanvas (x, y) {
     let bbox = this.canvas.getBoundingClientRect()
     return {
@@ -38,23 +37,21 @@ export class Pen {
       y: y - bbox.top  * (this.canvas.height / bbox.height)
     }
   }
-
+  // mouse click
   onMouseDown(e) {
     console.log('mousedown', e)
 
-    let loc = this.positionToCanvas(e.clientX, e.clientY)
-    
-    let relativeLoc = {x: loc.x, y: loc.y}
+    let location = this.positionToCanvas(e.clientX, e.clientY)
     let selectedPath = this.getSelectedPath()
-    loc = {x: loc.x, y: loc.y}
+
     this.dragging = true
     this.isNewEndPoint = false
     this.draggingControlPoint = false
-    this.currentEndPoint = this.isExistPoint(relativeLoc.x, relativeLoc.y)
+    this.currentEndPoint = this.isExistPoint(location.x, location.y)
     this.removeSelectedEndPoint()
 
     if(this.currentEndPoint ){
-      // 如果已经存在点
+      // if the endPoint exist
       this.currentEndPoint.selected = true;
 
       if(this.editCpBalance && !this.draggingControlPoint) {
@@ -71,10 +68,9 @@ export class Pen {
           this.createPath()
       }
     } else {
-       this.currentEndPoint = this.createEndPoint(relativeLoc.x, relativeLoc.y)
+       this.currentEndPoint = this.createEndPoint(location.x, location.y)
        this.isNewEndPoint = true;
        if(this.editCpBalance && selectedPath){
-          // keydown alt/option
           // add endpoint to selectedendpoint after
          selectedPath.path.addEndPoint(selectedPath.ep, this.currentEndPoint)
       }else {
@@ -86,12 +82,11 @@ export class Pen {
 
   onMouseMove(e) {
     e.preventDefault()
-    // console.log('mousemove', e)
+
     if(!this.dragging) {
       return
     }
     let loc = this.positionToCanvas(e.clientX, e.clientY)
-    loc = {x: loc.x, y: loc.y}
     let ced = this.currentEndPoint
 
     this.canvas.style.cursor = 'move'
@@ -103,8 +98,9 @@ export class Pen {
         ced.cp0.x = ced.x * 2 - loc.x
         ced.cp0.y = ced.y * 2 - loc.y
     } else if(this.draggingControlPoint){
-        // dragging  controlPoint
+        // Dragging controlPoint
         console.log('dragging controlPoint')
+
         if(this.editCpBalance){
             ced.cpBalance = false
         }
@@ -112,24 +108,23 @@ export class Pen {
         this.draggingControlPoint.y = loc.y
         ced.calculateControlPoint(loc.x, loc.y, this.draggingControlPoint)
     } else {
-        console.log('dragging endpoint')
-        // dragging  endpoint
-        // let offset = {
-        //   x: loc.x - ced.x,
-        //   y: loc.y-ced.y
-        // }
-        // ced.x = loc.x
-        // ced.y = loc.y
+        // Dragging endpoint
+        let offset = {
+          x: loc.x - ced.x,
+          y: loc.y-ced.y
+        }
+        ced.x = loc.x
+        ced.y = loc.y
 
-        // ced.cp1.x += offset.x
-        // ced.cp1.y += offset.y
-        // ced.cp0.x += offset.x
-        // ced.cp0.y += offset.y
+        ced.cp1.x += offset.x
+        ced.cp1.y += offset.y
+        ced.cp0.x += offset.x
+        ced.cp0.y += offset.y
     }
     this.renderer()
   }
   onMouseUp(e) {
-    console.log('mouseup', e)
+    // console.log('mouseup', e)
     this.canvas.style.cursor = 'default'
     this.dragging = false
     if(this.draggingControlPoint){
@@ -140,16 +135,29 @@ export class Pen {
       this.draggingControlPoint = false
     }
   }
+
+  // key down: provide delete endPoint
+  onKeyDown(e) {
+    switch(e.keyCode) {
+      case 8: 
+        e.preventDefault()
+        this.deleteEndPoint()
+        this.renderer()
+    }
+  }
+  // active the canvas's eventListner
   active() {
     let that = this
     let listeners = {
       mousedown(e) { that.onMouseDown(e) },
       mousemove(e) { that.onMouseMove(e) },
-      mouseup(e) { that.onMouseUp(e) }
+      mouseup(e) { that.onMouseUp(e) },
+      keydown(e) { that.onKeyDown(e) }
   };
     this.canvas.addEventListener('mousedown', listeners.mousedown, false)
     this.canvas.addEventListener('mousemove', listeners.mousemove, false)
     this.canvas.addEventListener('mouseup', listeners.mouseup, false)
+    document.addEventListener('keydown', listeners.keydown, false)
   }
 
 
@@ -159,9 +167,8 @@ export class Pen {
   }
 
   getSelectedPath() {
-    let i=0, j, l1, l2
-    for(l1 = this.paths.length; i< l1; i++){
-      for(j=0, l2 = this.paths[i].length; j < l2; j++){
+    for(let i = 0, len1 = this.paths.length; i < len1; i++){
+      for(let j = 0, len2 = this.paths[i].length; j < len2; j++){
         if(this.paths[i][j].selected){
           return {
             path: this.paths[i],
@@ -185,17 +192,18 @@ export class Pen {
     return ep
   }
 
-  // deleteEndPoint() {
-  //   let paths = this.paths
-  //   for(let i=0, l = paths.length; i < l; i++){
-  //     paths[i].deleteSelected()
-  //     if(paths[i].length === 0 && (i + 1 !== l)){
-  //       paths.splice(i, 1)
-  //       l = paths.length
-  //       i--
-  //     }
-  //   }
-  // }
+  // delete point
+  deleteEndPoint() {
+    let paths = this.paths
+    for(let i = 0, l = paths.length; i < l; i++){
+      paths[i].deleteSelected()
+      if(paths[i].length === 0 && (i + 1 !== l)){
+        paths.splice(i, 1)
+        l = paths.length
+        i--
+      }
+    }
+  }
 
   isExistPoint(x, y) {
     let cep, i = 0, l
@@ -213,15 +221,13 @@ export class Pen {
   }
   // renderer the spline
   renderer() {
-    let ep, prev_ep,
-        ctx = this.ctx
-    // let self = this
-    // let ratio = self.zoomRatio
+    let ep, prev_ep, ctx = this.ctx
 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
     this.paths.forEach((path) => {
-      for(let i = 0, l = path.length; i < l; i++) {
+      let len = path.length
+      for(let i = 0; i < len; i++) {
         ep = path[i]
         ep.printControlPoints()
         if(i > 0) {
@@ -231,7 +237,7 @@ export class Pen {
         }
       }
       if(path.isClose){
-          prev_ep = path[l - 1]
+          prev_ep = path[len - 1]
           ep = path[0]
           this.bezierCurveTo(prev_ep, ep, ctx)
       }
