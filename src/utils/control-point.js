@@ -8,10 +8,6 @@ export class ControlPoint {
     this.y = y || 0
   }
   
-  // ctx() {
-  //   return ctx
-  // }
-
   /* 画控制点 */
   draw(ratio) {
     ratio = ratio || 1

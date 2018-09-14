@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas钢笔工具</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    #matting-img {
+      position: absolute;
+      top: 0;
+      left: calc(50% - 500px);
+      z-index: 100;
+    }
+    #matting-pen {
+      position: absolute;
+      top: 0;
+      left: calc(50% - 500px);
+      z-index: 300;
+    }
+  </style>
+</head>
+<body>
+    <canvas id="matting-img" style="border: 1px solid #000"></canvas>
+    <canvas id="matting-pen" width="0" height="0"></canvas>
+    <script src="https://cdn.bootcss.com/fabric.js/2.3.0/fabric.js"></script>
+    <script src="/main.0104bf58.js"></script>
+</body>
+</html>
