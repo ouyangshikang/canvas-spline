@@ -97,7 +97,7 @@ export class Pen {
 
         ced.cp0.x = ced.x * 2 - loc.x
         ced.cp0.y = ced.y * 2 - loc.y
-    } else if(this.draggingControlPoint){
+    } else if (this.draggingControlPoint){
         // Dragging controlPoint
         console.log('dragging controlPoint')
 
@@ -255,6 +255,7 @@ export class Pen {
         ep.cp0.x, ep.cp0.y,
         ep.x, ep.y
     )
+    // ctx.quadraticCurveTo(prev_ep.cp1.x, prev_ep.cp1.y, ep.x, ep.y)
     ctx.stroke()
     ctx.restore()
   }

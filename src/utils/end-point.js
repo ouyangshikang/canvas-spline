@@ -16,12 +16,7 @@ export class EndPoint {
     this.cp1 = cp1 || new ControlPoint(x, y)
     this.cpBalance = true  // 控制平衡点
   }
-  // canvas() {
-  //   return canvas
-  // }
-  // ctx() {
-  //   return ctx
-  // }
+
   draw(ratio) {
     ratio = ratio || 1
     this.ctx.beginPath()
@@ -106,7 +101,6 @@ export class EndPoint {
 
       controlPoint.counterpart.x = staticDistance / dynamicDistance * (this.x - x) + this.x
       controlPoint.counterpart.y = staticDistance / dynamicDistance * (this.y - y) + this.y
-      // controlPoint.counterpart will be deleted on mouseup
     }
     controlPoint.x = x
     controlPoint.y = y
